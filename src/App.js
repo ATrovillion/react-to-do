@@ -6,20 +6,23 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      todos: [
-        { description: 'Buy milk and bread', isCompleted: true },
-        { description: 'Pay the water bill', isCompleted: false},
-        { description: 'Pick up drycleaning', isCompleted: false}
-      ],
+      todos: [],
       newTodoDescription: ''
-    };
+    }
   }
 
   handleChange(e) {
+    console.log(e)
     this.setState({ newTodoDescription: e.target.value })
   }
   
-
+  deleteTodo(index) {
+    const todos = this.state.todos.filter((todo, todoIndex) => {
+      return todoIndex !== index
+    })
+    this.setState({ todos });
+  }
+  
   handleSubmit(e) {
     e.preventDefault();
     if (!this.state.newTodoDescription) { return }
@@ -39,13 +42,14 @@ class App extends Component {
       <div className="App">
         <ul>
           { this.state.todos.map( (todo, index) =>
-            <ToDo key={ index } description={ todo.description } isCompleted={ todo.isCompleted } toggleComplete={ () => this.toggleComplete(index) } />
+            <ToDo key={ index } description={ todo.description } isCompleted={ todo.isCompleted } toggleComplete={ () => this.toggleComplete(index) } deleteTodo={ () => {this.deleteTodo(index)}} />
             )}
         </ul>
         <form onSubmit={ (e) => this.handleSubmit(e) }>
           <input type="text" value={ this.state.newTodoDescription } onChange={ (e) => this.handleChange(e) } />
           <input type="submit" />
         </form>
+        
       </div>
     );
   }
